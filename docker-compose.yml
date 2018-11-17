@@ -1,0 +1,29 @@
+version: "3.2"
+services:
+  php:
+    build: './php/'
+    volumes:
+      - ./www/:/var/www/
+    environment:
+      - PHP_EXTENSIONS=pdo_mysql
+  apache:
+    build: './apache/'
+    depends_on:
+      - php
+      - mysql
+    ports:
+      - "80:80"
+    volumes:
+      - ./www/:/var/www/
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - ./database:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: docker
+      MYSQL_USER: antoine
+      MYSQL_PASSWORD: password
